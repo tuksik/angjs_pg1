@@ -7,6 +7,7 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+
 module.exports = function (grunt) {
 
   // Load grunt tasks automatically
@@ -14,6 +15,9 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
+
+  //Add Protractor runner
+  require('grunt-protractor-runner')(grunt);
 
   // Configurable paths for the application
   var appConfig = {
@@ -60,7 +64,7 @@ module.exports = function (grunt) {
           '.tmp/styles/{,*/}*.css',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
-      }
+      },
     },
 
     // The actual grunt server settings
@@ -111,6 +115,26 @@ module.exports = function (grunt) {
       }
     },
 
+	//Protractor configuration
+
+	  protractor: {
+		  options: {
+			  configFile: "node_modules/protractor/example/conf.js", // Default config file
+			  keepAlive: true, // If false, the grunt process stops when the test fails.
+			  noColor: false, // If true, protractor will not use colors in its output.
+			  args: {
+				  // Arguments passed to the command
+			  }
+		  },
+		  all: {   // Grunt requires at least one target to run so you can simply put 'all: {}' here too.
+			  options: {
+				  configFile: "test/protractor-tests/conf.js", // Target-specific config file
+				  args: {} // Target-specific arguments
+			  }
+		  },
+	  },
+
+	
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
@@ -399,6 +423,11 @@ module.exports = function (grunt) {
     'filerev',
     'usemin',
     'htmlmin'
+  ]);
+  
+//Protractor task
+  grunt.registerTask('test-uat', [
+    'protractor'
   ]);
 
   grunt.registerTask('default', [
